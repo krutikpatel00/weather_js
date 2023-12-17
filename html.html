@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet" />
+      <style>
+            * {
+                  padding: 0;
+                  margin: 0;
+                  box-sizing: border-box;
+
+
+            }
+
+            ul {
+                  list-style: none;
+            }
+
+            .flex {
+                  display: flex;
+            }
+
+            .flex-direction {
+                  flex-direction: column;
+            }
+
+            .weather {
+                  justify-content: center;
+                  align-items: center;
+                  height: 100vh;
+                  background-color: rgb(13, 159, 167);
+            }
+
+            .weather-inner {
+                  width: 450px;
+                  background-color: rgba(255, 255, 255, 0.91);
+                  padding: 40px;
+                  border-radius: 10px;
+            }
+
+            .weather-items input {
+                  width: 100%;
+                  height: 45px;
+                  padding: 0px 15px;
+                  border-radius: 50px;
+                  outline: none;
+                  font-size: 18px;
+                  border: 2px solid black;
+                  text-transform: capitalize;
+
+            }
+
+            .align-cetenr {
+                  align-items: center;
+            }
+
+            .p-reletive {
+                  position: relative;
+            }
+
+            #btnclick {
+                  height: 40px;
+                  width: 40px;
+                  display: inline-block;
+                  background-color: transparent;
+                  border-radius: 50%;
+                  line-height: 40px;
+                  font-size: 20px;
+                  border: 2px solid black;
+                  position: absolute;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  right: 4px;
+            }
+
+            .weather-img {
+                  justify-content: center;
+                  align-items: center;
+                  padding: 25px 0px;
+            }
+
+            .weather-content {
+                  justify-content: space-around;
+            }
+
+            .weather-content i {
+                  font-size: 60px;
+                  padding: 0 10px 0px 0px;
+
+            }
+
+            .weather-content h4 {
+                  font-size: 18px;
+
+            }
+
+            .celsius {
+                  font-size: 30px;
+                  padding: 0 0 5px 0;
+
+            }
+
+            .status {
+                  font-size: 18px;
+                  text-align: center;
+                  text-transform: capitalize;
+
+
+            }
+
+            .weather-content p {
+                  font-size: 16px;
+
+            }
+      </style>
+</head>
+
+<body>
+      <div class="weather flex">
+            <div class="weather-inner">
+                  <div class="weather-items p-reletive">
+                        <input type="text" id="input" value="surat">
+                        <button id="btnclick"><i class="ri-search-line"></i></button>
+                  </div>
+                  <div class="flex flex-direction weather-img">
+                        <img src="" alt="" width="150px" id="weatherImg">
+                        <div>
+                              <h2 class="celsius"></h2>
+                              <p class="status"></p>
+                        </div>
+                  </div>
+                  <div class="flex weather-content align-cetenr">
+                        <ul class="flex align-cetenr">
+                              <li><i class="ri-contrast-drop-line"></i></li>
+                              <li>
+                                    <h4 id="humidity"></h4>
+                                    <p>Humidity</p>
+                              </li>
+                        </ul>
+                        <ul class="flex align-cetenr">
+                              <li><i class="ri-cloud-windy-line"></i></li>
+                              <li>
+                                    <h4 id="windspeed"></h4>
+                                    <p>Wind Speed</p>
+                              </li>
+                        </ul>
+                  </div>
+            </div>
+      </div>
+
+
+      <script>
+            let input = document.querySelector('#input');
+            let btnclick = document.querySelector("#btnclick")
+            let celsiusDisplay = document.querySelector(".celsius");
+            let humidity = document.querySelector("#humidity");
+            let windspeed = document.querySelector("#windspeed");
+            let status = document.querySelector(".status");
+            let imgWeather = document.querySelector("#weatherImg");
+
+            btnclick.addEventListener("click", () => {
+                  weatherAPI(input.value);
+
+            });
+            async function weatherAPI(city) {
+                  let api_key = "8be011a2b6e34345b12f28f7089f5add"
+                  let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}`
+
+                  let weather_date = await fetch(url);
+                  let data = await weather_date.json();
+
+                  let { coord, weather, base, main, visibility, wind, clouds, dt, sys, timezone, id, name, cod } = data;
+                  console.log(data);
+
+                  let celsius = main.temp - 273.15;
+                  celsiusDisplay.innerHTML = `${Math.floor(celsius)}°C`;
+                  humidity.innerHTML = `${main.humidity}%`;
+                  windspeed.innerHTML = `${wind.speed} m/s`;
+                  status.innerHTML = `${weather[0].description}`;
+                  imgWeather.src = ` https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
+            }
+            weatherAPI(input.value);
+      </script>
+</body>
+
+</html>
